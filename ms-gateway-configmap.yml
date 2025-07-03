@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-gateway-configmap
+  namespace: default
+data:
+  application.yml: |
+    spring:
+      application:
+        name: ms-gateway
+      cloud:
+        gateway:
+          routes:
+            - id: ms-eventos
+              uri: lb://ms-eventos
+              predicates:
+                - Path=/gw/api/v1/eventos/**
+              filters:
+                - StripPrefix=1
+            - id: ms-participantes
+              uri: lb://ms-participantes
+              predicates:
+                - Path=/gw/api/v1/participantes/**
+              filters:
+                - StripPrefix=1
+          discovery:
+            locator:
+              enabled: true
+    server:
+      port: 9092

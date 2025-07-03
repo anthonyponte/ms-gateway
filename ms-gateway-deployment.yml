@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-gateway-deployment
+  labels:
+    app: ms-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-gateway
+  template:
+    metadata:
+      labels:
+        app: ms-gateway
+    spec:
+      containers:
+        - name: ms-gateway
+          image: anthonyponte/ms-gateway:1.0.0
+          args:
+            - "--spring.config.additional-location=file:/config/"
+          ports:
+            - containerPort: 9092
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "250m"
+              memory: "300Mi"
+          volumeMounts:
+            - name: ms-gateway-volume
+              mountPath: /config/application.yml
+              subPath: application.yml
+      volumes:
+        - name: ms-gateway-volume
+          configMap:
+            name: ms-gateway-configmap
+            items:
+              - key: application.yml
+                path: application.yml

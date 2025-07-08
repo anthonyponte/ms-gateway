@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ms-gateway
-          image: anthonyponte/ms-gateway:1.0.0
+          image: anthonyponte/ms-gateway:1.0.1
           args:
             - "--spring.config.additional-location=file:/config/"
           ports:
